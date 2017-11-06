@@ -1,0 +1,109 @@
+<html>
+
+        <button pButton type="button" (click)="dialogVisible = true" label="Add DNS"></button>
+        
+<div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+        <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+        <input #gb type="text" pInputText size="50" placeholder="Global Filter">
+</div>
+
+
+<!--  Add new DNS pop up dialog -->
+<p-dialog header="Add DNS" [(visible)]="dialogVisible" [responsive]="true" showEffect="fade" [modal]="true" >
+        <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2 label">Subdomain: </div>
+                    <div class="ui-grid-col-10">
+                        <input #inputnewsubdomain id="input_new_subdomain" type="text" size="30" pInputText>
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2 label">Primary IP: </div>
+                    <div class="ui-grid-col-10">
+                        <input #inputnewprimaryip id="input_new_primaryip" type="text" size="30" pInputText>
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2 label">Remark: </div>
+                    <div class="ui-grid-col-10">
+                        <input #inputnewremark id="input_new_remark" type="text" size="30" pInputText>
+                    </div>
+                </div>
+
+                <!-- add new DNS button -->
+                <button pButton type="button" (click)="insertDNS(inputnewsubdomain.value, inputnewprimaryip.value, inputnewremark.value)" label="Add new DNS"></button>
+               
+            </div>
+    </p-dialog>
+
+
+<p-dataTable [value]="allDNS" [globalFilter]="gb" [immutable]=false expandableRows="true" selectionMode="single" #dt (onRowClick)="dt.toggleRow($event.data)">
+    <!--<p-column *ngFor="let col of cols" [field]="col.field" [header]="col.header"></p-column>
+            -->
+    <p-column field="subdomain" header="Subdomain" ></p-column>
+    <p-column field="primaryip" header="Primary IP" ></p-column>
+    <p-column field="remark" header="Remark" ></p-column>
+
+
+    <!--  Expand row below selected data -->
+    <ng-template let-selectedDNS pTemplate="rowexpansion">
+        <div class="ui-grid  ui-fluid" style="font-size:16px;padding:20px">
+            <div class="ui-grid-row">
+
+                <!-- show data -->
+                <div class="ui-grid-col-9" *ngIf="disabled">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 label">Subdomain: </div>
+                            <div class="ui-grid-col-10">{{selectedDNS.subdomain}}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 label">Primary IP: </div>
+                            <div class="ui-grid-col-10">{{selectedDNS.primaryip}}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 label">Remark: </div>
+                            <div class="ui-grid-col-10">{{selectedDNS.remark}}</div>
+                        </div>
+
+                        <!-- show edit box and delete DNS button -->
+                        <button id="disabled-btn" type="button" (click)="toggleDisabled()" [disabled]="!disabled" pButton label="Edit"></button>
+                        <button pButton type="button" (click)="deleteDNS(selectedDNS)" label="Delete entry"></button>
+
+                    </div>
+                </div>
+
+                <!-- Update data -->
+                <div class="ui-grid-col-9" *ngIf="!disabled">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 label">Subdomain: </div>
+                            <div class="ui-grid-col-10">
+                                <input #inputnewsubdomain id="input" type="text" size="30" pInputText value={{selectedDNS.subdomain}}>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 label">Primary IP: </div>
+                            <div class="ui-grid-col-10">
+                                <input #inputnewprimaryip id="input" type="text" size="30" pInputText value={{selectedDNS.primaryip}}>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 label">Remark: </div>
+                            <div class="ui-grid-col-10">
+                                <input #inputnewremark id="input" type="text" size="30" pInputText value={{selectedDNS.remark}}>
+                            </div>
+                        </div>
+
+                        <!-- update and cancel edit button -->
+                        <button pButton type="button" (click)="updateDNS(selectedDNS, inputnewsubdomain.value, inputnewprimaryip.value, inputnewremark.value)" label="Update data"></button>
+                        <button id="disabled-btn" type="button" (click)="toggleDisabled()" [disabled]="disabled" pButton label="Cancel"></button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-dataTable>
+
+</html>
